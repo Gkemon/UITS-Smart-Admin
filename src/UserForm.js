@@ -1,14 +1,39 @@
 import React, { Component } from "react";
-import { PizZip ,PizZipUtils} from "pizzip";
-import fileSaver from "file-saver";
 class UserForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      department: "CSE"
+      department: "CSE",
+      memo_no:""
     };
+
+    this.getMemoID = this.getMemoID.bind(this);
+    this.handleSelectionChange = this.handleSelectionChange.bind(this);
+
   }
 
+  componentDidMount(){
+    this.getMemoID(this.state.department);
+  }
+
+  getMemoID=(dept)=>{
+ 
+    var currentTime = new Date();
+    var mn = "UITS/"+dept +"/"+ currentTime.getFullYear().toString().substr(-2)+""+
+      currentTime.getMonth()+""+currentTime.getDay()+""+currentTime.getHours()+""+
+      currentTime.getMinutes() +""+ currentTime.getSeconds();
+
+      console.log(mn);
+      this.setState({ memo_no: mn ,
+                      department:dept});
+  }
+
+  handleSelectionChange(event){
+   
+    this.getMemoID(event.target.value);
+
+  }
+  
   render() {
     return (
       <div
@@ -20,31 +45,35 @@ class UserForm extends React.Component {
           height: "Auto"
         }}
       >
-        <form action='/printDocx.html'>
-          <select style={{ margin: "20px", alignItems: "center" }}>
+        <form action='/printDocx.html'  >
+          <select name="dept" onChange={this.handleSelectionChange} 
+          style={{ margin: "20px", alignItems: "center" }}>
             <option value="CSE">
               Department of Computer Science and Technology (CSE)
             </option>
             <option value="IT">
               Department of Information Technology (IT)
             </option>
-            <option value="EEE">EEE</option>
-            <option value="PHA">PHA</option>
-            <option value="CIVIL">CIVIL</option>
-            <option value="BBA">BBA</option>
-            <option value="MBA">MBA</option>
-            <option value="LAW">LAW</option>
+            <option value="EEE">Department of Electrical and Electronics Engineering (EEE)</option>
+            <option value="PHA">Department of Pharmacy (PHA)</option>
+            <option value="CIVIL">Department of Civil Engineering (CE)</option>
+            <option value="BBA">Department of Business Administration (BBA)</option>
+            <option value="MBA">Masters of Business Administration (MBA)</option>
+            <option value="LAW">Department of Law</option>
           </select>
 
           <br />
           <input
             type="text"
             name="id"
+            required
             placeholder="Student ID:"
-            style={{ margin: "20px" }}
+            style={{ margin: "20px" }
+          }
           />
           <br />
           <input
+            required
             type="text"
             name="name"
             placeholder="Student name:"
@@ -52,6 +81,7 @@ class UserForm extends React.Component {
           />
           <br />
           <input
+            required
             style={{ margin: "20px" }}
             type="text"
             name="fName"
@@ -59,6 +89,7 @@ class UserForm extends React.Component {
           />
           <br />
           <input
+            required
             style={{ margin: "20px" }}
             type="text"
             name="mName"
@@ -66,38 +97,47 @@ class UserForm extends React.Component {
           />
           <br />
           <input
+            required
             style={{ margin: "20px" }}
             type="text"
-            name="fromSemester"
+            name="from_sem"
             placeholder="From semester:"
           />
           <br />
           <input
+            required
             style={{ margin: "20px" }}
             type="text"
-            name="toSemester"
+            name="to_sem"
             placeholder="To semester:"
           />
           <p style={{ marginLeft: "20px", fontWeight: "bold" }}>
             Date of pass:
           </p>
           <input
+            required
             style={{ marginLeft: "20px" }}
             type="date"
-            name="passDate"
+            name="date_of_pass"
             placeholder="Date of pass:"
           />
           <br />
           <input
+            required
             style={{ margin: "20px", style: "bold" }}
-            type="text"
+            type="number"
+            step="0.10"
             name="cgpa"
             placeholder="CGPA:"
           />
           <br />
-
+        
           <input
-            onClick={this.onSubmit}
+            type="hidden"
+            name="memo_no"
+            value={this.state.memo_no}
+          />
+          <input
             style={{ margin: "20px" }}
             type="submit"
             value="Print"
