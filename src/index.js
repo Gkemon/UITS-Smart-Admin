@@ -9,7 +9,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
 <Router>
-    <Route path="/userForm" component={ userForm } />
+        <Route path="/userForm/:type" component={ userForm } />
     <Route path="/" exact  component={ App } />
 </Router>, document.getElementById('root'));
 serviceWorker.unregister();

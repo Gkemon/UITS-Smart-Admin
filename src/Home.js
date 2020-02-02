@@ -16,7 +16,7 @@ class Home extends Component {
                 To make a testimonial of any student, you have to give some basic information of student.
               </Card.Text>
               <Button  onClick={() =>  
-              window.location = '/userForm'}  variant="primary">Give a Testimonial</Button>
+              window.location = '/userForm/ts'}  variant="primary">Give a Testimonial</Button>
             </Card.Body>
           </Card>
 
@@ -28,7 +28,7 @@ class Home extends Component {
               </Card.Text>
         
               <Button onClick={() =>  
-              window.location = '/userForm'} 
+              window.location = '/userForm/rc'} 
               variant="primary">Give a Recommendation</Button>
           
             </Card.Body>
@@ -42,7 +42,7 @@ class Home extends Component {
               </Card.Text>
         
               <Button onClick={() =>  
-              window.location = '/userForm'} 
+              window.location = '/userForm/wm'} 
               variant="primary">Give a 'TO WHOM IT MAY CONCERN'</Button>
           
             </Card.Body>

@@ -23,7 +23,6 @@ class UserForm extends React.Component {
       currentTime.getMonth()+""+currentTime.getDay()+""+currentTime.getHours()+""+
       currentTime.getMinutes() +""+ currentTime.getSeconds();
 
-      console.log(mn);
       this.setState({ memo_no: mn ,
                       department:dept});
   }
@@ -73,7 +72,7 @@ class UserForm extends React.Component {
           />
           <br />
           <input
-            required
+             required
             type="text"
             name="name"
             placeholder="Student name:"
@@ -81,7 +80,7 @@ class UserForm extends React.Component {
           />
           <br />
           <input
-            required
+             required
             style={{ margin: "20px" }}
             type="text"
             name="fName"
@@ -89,7 +88,7 @@ class UserForm extends React.Component {
           />
           <br />
           <input
-            required
+             required
             style={{ margin: "20px" }}
             type="text"
             name="mName"
@@ -97,7 +96,7 @@ class UserForm extends React.Component {
           />
           <br />
           <input
-            required
+             required
             style={{ margin: "20px" }}
             type="text"
             name="from_sem"
@@ -105,7 +104,7 @@ class UserForm extends React.Component {
           />
           <br />
           <input
-            required
+             required
             style={{ margin: "20px" }}
             type="text"
             name="to_sem"
@@ -115,19 +114,20 @@ class UserForm extends React.Component {
             Date of pass:
           </p>
           <input
-            required
+             required
             style={{ marginLeft: "20px" }}
             type="date"
+            dateformat="d M y"
             name="date_of_pass"
             placeholder="Date of pass:"
           />
           <br />
           <input
-            required
+             required
             style={{ margin: "20px", style: "bold" }}
             type="number"
-            step="0.10"
             name="cgpa"
+            step="0.1"
             placeholder="CGPA:"
           />
           <br />
@@ -136,6 +136,11 @@ class UserForm extends React.Component {
             type="hidden"
             name="memo_no"
             value={this.state.memo_no}
+          />
+          <input
+            type="hidden"
+            name="type"
+            value={this.props.match.params.type}
           />
           <input
             style={{ margin: "20px" }}

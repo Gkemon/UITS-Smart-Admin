@@ -19,7 +19,10 @@
          to_sem="to_sem",
          dept="dept",
           date_of_pass="date_of_pass",
-           cgpa="cgpa";
+           cgpa="cgpa",
+           dp_head="dp_head",
+           type="type",
+           dp_head_email="dp_head_email";
 
 
 
@@ -44,10 +47,34 @@
         };
 
     function generate() {
-        loadFile("/testimonial.docx", function (error, content) {
+      var testimonial="/testimonial.docx";
+      var recommendation="";
+      var whome="";
+      var path;
+      if(getUrlParameter(type)=="ts"){
+         path=testimonial;
+      }else if(getUrlParameter(type) == "rc"){
+          path = recommendation;
+      }else {
+          path = whome;
+      }
+
+        loadFile(path, function (error, content) {
             if (error) { throw error };
             var zip = new PizZip(content);
-            var doc = new window.docxtemplater().loadZip(zip)
+            var doc = new window.docxtemplater().loadZip(zip);
+            var dp_head1,dept1,dp_head_email1;
+        
+
+            if(getUrlParameter(dept)=="CSE"){
+                dept1="Department of Computer Science and Technology (CSE)";
+                dp_head1="Al-Imtiaz";
+                dp_head_email1="al.imtiaz@uits.edu.bd";
+            }else if(getUrlParameter(dept)=="IT"){
+                dept1 = "Department of Information Technology (IT)";
+                dp_head1 = "Md. Al Shayokh";
+                dp_head_email1 = "al.shayokh@uits.edu.bd";
+            }
             doc.setData({
                 memo_no: getUrlParameter(memo_no),
                 date: new Date().toDateString(),
@@ -57,9 +84,11 @@
                 id:  getUrlParameter(id),
                 from_sem:  getUrlParameter(from_sem),
                 to_sem:  getUrlParameter(to_sem),
-                dept:  getUrlParameter(dept),
-                date_of_pass:  getUrlParameter(date_of_pass),
+                dept: dept1,
+                date_of_pass: new Date(getUrlParameter(date_of_pass)).toDateString() ,
                 cgpa:  getUrlParameter(cgpa),
+                dp_head: dp_head1,
+                dp_head_email: dp_head_email1
             });
             try {
                 // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
