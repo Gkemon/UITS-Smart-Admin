@@ -5,10 +5,16 @@ import {Jumbotron} from 'react-bootstrap';
 import logo from './logo.svg';
 
 class Home extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
     render() {
         return (
             <Jumbotron>
             <img src={logo} height="70px" />
+           
            <Card bg="light" className="text-center" style={{ margin: 10 }}>
             <Card.Body>
               <Card.Title>Testimonial</Card.Title>
@@ -41,12 +47,16 @@ class Home extends Component {
                 To make a 'TO WHOM IT MAY CONCERN' of any student, you have to give some basic information of student.
               </Card.Text>
         
-              <Button onClick={() =>  
+              <Button disabled onClick={() =>  
               window.location = '/userForm/wm'} 
               variant="primary">Give a 'TO WHOM IT MAY CONCERN'</Button>
           
             </Card.Body>
           </Card>
+            <Button onClick={() =>
+              this.props.firebaseAuth.signOut()} variant="danger">
+              Logout
+              </Button>
         </Jumbotron>
         );
     }

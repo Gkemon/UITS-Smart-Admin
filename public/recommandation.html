@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="gr__eduber_net"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="recommandation_files/bootstrap.css">
+<script src="recommandation_files/jquery.js"></script>
+<script src="recommandation_files/bootstrap.js"></script>
+<link rel="stylesheet" href="recommandation_files/w3.css">
+
+<script>
+
+var isRecommanded=true;
+var url      = window.location.href;     // Returns full URL (https://example.com/path/example.html)
+var baseURL   = window.location.origin;   // Returns base URL (https://example.com)
+var nameKey = "name";
+var uidKey = "uid";
+
+
+
+
+
+
+function yesButtonClicked(){
+  isRecommanded=true;
+};
+function noButtonClicked(){
+  isRecommanded=false;
+};
+
+
+//Set User name in text after loading site 
+$(document).ready(function (){
+  
+            //Set user name in title
+            $("#title").text("Help Grow "+getUrlParameter(nameKey)+" Correctly");
+            //Set user name in subtitle
+            $("#subtitle").text("Would you recommend "+getUrlParameter(nameKey));
+
+});
+
+
+
+
+function recommandUser(userId, name, email, isRecommanded,shortNote) {
+
+
+  firebase.database().ref('recommandation/' + userId).push().set({
+    name: name,
+    email: email,
+    shortNote : shortNote,
+    isRecommanded : isRecommanded,
+  } ,function(error) {
+    if (error) {
+      alert("The write failed"+error);
+      // The write failed...
+    } else {
+      alert("Data is posted");
+      // Data saved successfully!
+    }
+  });
+
+
+}
+  
+
+
+
+
+
+    $(document).ready(function(){
+        $("#submit").click(function(){
+
+
+
+
+            var comment = $.trim($("#email").val());
+
+
+// check name
+             if($("#name").val().length==0){
+              alert("Please input your name.")
+              $("#name").focus();        
+              return; 
+
+             }
+
+
+//check email
+            if(!isEmail(comment)){
+              alert("Please input a valid email.")
+              $("#email").focus();        
+              return;  
+            }
+
+
+          recommandUser(getUrlParameter(uidKey),$("#name").val(),$("#email").val(),isRecommanded,$("#note").val());
+
+          
+        });
+        
+    });
+
+    function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+};
+
+    function isEmail(email) {
+  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return regex.test(email);
+}
+
+
+
+</script>
+
+<style>
+
+
+.first-column {
+    width: 60%;
+    height: 100%;
+    float: left;
+}
+
+.second-column {
+    width: 40%;
+    height: 100%;
+    float: right;
+}
+
+
+.header {
+  font-family: Montserrat;
+  font-size: 32px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.43;
+  letter-spacing: 2px;
+    text-align: left;
+  color: #000000;
+}
+
+.header2 {
+ margin-top: 12px;
+ margin-bottom: 12px;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.43;
+  letter-spacing: 1px;
+    text-align: left;
+  color: #000000;
+}
+
+
+
+
+
+@media only screen and (max-width: 800px) {
+
+   .first-column {
+        width: 100%;
+        padding-bottom: 10px;
+        float: none;
+    }
+
+    .second-column {
+        width: 100%;
+        padding-bottom: 10px;
+        float: none;
+    }
+    
+}
+
+
+</style>
+
+</head>
+<body data-gr-c-s-loaded="true">
+
+<div class="first-column">
+        <img src="recommandation_files/cover.png" style="max-width:100%; max-height:100%">
+  </div>
+                
+<div class="second-column">
+        <div class="container" style="margin:10px 00px 00px 10px;">
+
+
+     <a href="https://www.eduber.net/index.html">
+      <button type="button" class="btn btn-default">Home</button>
+      </a>
+
+      <a href="https://eduber.net/index.html#about">
+        <button type="button" class="btn btn-link">About</button>  
+      </a>
+
+        <a href="https://eduber.net/index.html#screenshot">
+        <button type="button" class="btn btn-link">Tutorial</button>  
+      </a>
+
+        <a href="https://eduber.net/privacy.html">
+        <button type="button" class="btn btn-link">Policy And Terms</button>  
+      </a>
+        <a href="https://eduber.net/faq.html">
+        <button type="button" class="btn btn-link">Faq</button>  
+      </a>
+        </div>
+        <div class="header" id="title" style="margin:30px 10px 10px 80px;">Help Grow G.K.+Emon Correctly</div>
+        <div class="well" style="margin:00px 70px 70px 80px; background-color: white;">
+            <h4 class="header2" id="subtitle">Would you recommend G.K.+Emon</h4>
+
+            <div class="container">
+                    <button type="button" id="yes" onclick="yesButtonClicked();" class="btn btn-info" style="margin: 5px ;height:40px;width:100px ;font-size: 18px;">Yes</button>
+                    <button type="button" id="no" onclick="noButtonClicked();" class="btn btn-default " style="margin: 5px ;height:40px;width:100px; font-size: 18px;">No</button>
+            </div>
+            <h4 class="header2">Write a short recommendation</h4>
+
+            
+                   <textarea class="form-control" rows="6" id="note" placeholder="Tell something..." required=""></textarea>                             
+                    <h4 class="header2">Full Name</h4>
+                    <input class="form-control" id="name" type="text" placeholder="Yourname">
+                    <h4 class="header2">Email</h4>
+                    <input class="form-control" id="email" type="text" placeholder="Youremail">
+                    <div overflow:auto="">
+                    <button id="submit" type="button" class="btn btn-info btn-block" style="margin-top: 20px">Submit</button>
+                   </div>
+        </div>
+    </div>
+
+                
+          <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="recommandation_files/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#reserved-urls -->
+
+<!-- Initialize Firebase -->
+
+<!-- Add Firebase products that you want to use -->
+<script src="recommandation_files/firebase-auth.js"></script>
+<script src="recommandation_files/firebase-firestore.js"></script>
+<script src="recommandation_files/init.htm"></script> 
+<script src="recommandation_files/firebase-database.js"></script> 
+
+<script>
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDqWXkaex5MMChUnnTJXStDqjWoHLpsjRE",
+    authDomain: "edubar-d886b.firebaseapp.com",
+    databaseURL: "https://edubar-d886b.firebaseio.com",
+    projectId: "edubar-d886b",
+    storageBucket: "edubar-d886b.appspot.com",
+    messagingSenderId: "750458429286",
+    appId: "1:750458429286:web:358f1a7da4efcd86"
+};
+
+          // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+
+</script>
+
+
+
+
+    
+
+ </body></html>

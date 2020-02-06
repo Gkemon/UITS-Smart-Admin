@@ -1,36 +1,76 @@
 <html>
-
+    <head>
+<link rel="icon" href="./uits_logo.jpg" />
+<link rel="apple-touch-icon" href="./uits_logo.jpg"/>
+    </head>
 <body>
-    <button onclick="generate()">Download document</button>
-</body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.16.8/docxtemplater.js"></script>
-<script src="https://unpkg.com/pizzip@3.0.6/dist/pizzip.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-<script src="https://unpkg.com/pizzip@3.0.6/dist/pizzip-utils.js"></script>
-<script>
+    <button onclick="generate()" id="btn_submit"  >Download document</button>
 
-     var memo_no="memo_no",
-      date="date",
-      name="name",
-      fName="fName",
-       mName="mName",
-       id="id",
-        from_sem="from_sem",
-         to_sem="to_sem",
-         dept="dept",
-          date_of_pass="date_of_pass",
-           cgpa="cgpa",
-           dp_head="dp_head",
-           type="type",
-           dp_head_email="dp_head_email";
-
-
-
-
-    function loadFile(url, callback) {
-        PizZipUtils.getBinaryContent(url, callback);
-    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.16.8/docxtemplater.js"></script>
+    <script src="https://unpkg.com/pizzip@3.0.6/dist/pizzip.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+    <script src="https://unpkg.com/pizzip@3.0.6/dist/pizzip-utils.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="recommandation_files/firebase-app.js"></script>
+        
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+             https://firebase.google.com/docs/web/setup#reserved-urls -->
+        
+        <!-- Initialize Firebase -->
+        
+        <!-- Add Firebase products that you want to use -->
+        <script src="recommandation_files/firebase-auth.js"></script>
+        <script src="recommandation_files/firebase-firestore.js"></script>
+        <script src="recommandation_files/firebase-database.js"></script>
     
+    
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBP4n-shYESlm6EpxLGeJtXWW-hQn2sdSU",
+            authDomain: "uits-smart-admin.firebaseapp.com",
+            databaseURL: "https://uits-smart-admin.firebaseio.com",
+            projectId: "uits-smart-admin",
+            storageBucket: "uits-smart-admin.appspot.com",
+            messagingSenderId: "406914107888",
+            appId: "1:406914107888:web:c133894612a5193c957535",
+            measurementId: "G-N797DJFZNG"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+       
+
+        var memo_no = "memo_no",
+            date = "date",
+            name = "name",
+            fName = "fName",
+            mName = "mName",
+            id = "id",
+            from_sem = "from_sem",
+            to_sem = "to_sem",
+            dept = "dept",
+            date_of_pass = "date_of_pass",
+            cgpa = "cgpa",
+            dp_head = "dp_head",
+            type = "type",
+            sub = "sub",
+            he = "he",
+            him = "him"
+            He = "He",
+            Him = "Him",
+            his = "his",
+            His = "His",
+            dp_head_email = "dp_head_email"
+            gender="gender";
+
+
+
+
+        function loadFile(url, callback) {
+            PizZipUtils.getBinaryContent(url, callback);
+        }
+
         function getUrlParameter(sParam) {
             var sPageURL = window.location.search.substring(1),
                 sURLVariables = sPageURL.split('&'),
@@ -46,84 +86,135 @@
             }
         };
 
-    function generate() {
-      var testimonial="/testimonial.docx";
-      var recommendation="";
-      var whome="";
-      var path;
-      if(getUrlParameter(type)=="ts"){
-         path=testimonial;
-      }else if(getUrlParameter(type) == "rc"){
-          path = recommendation;
-      }else {
-          path = whome;
-      }
-
-        loadFile(path, function (error, content) {
-            if (error) { throw error };
-            var zip = new PizZip(content);
-            var doc = new window.docxtemplater().loadZip(zip);
-            var dp_head1,dept1,dp_head_email1;
-        
-
-            if(getUrlParameter(dept)=="CSE"){
-                dept1="Department of Computer Science and Technology (CSE)";
-                dp_head1="Al-Imtiaz";
-                dp_head_email1="al.imtiaz@uits.edu.bd";
-            }else if(getUrlParameter(dept)=="IT"){
-                dept1 = "Department of Information Technology (IT)";
-                dp_head1 = "Md. Al Shayokh";
-                dp_head_email1 = "al.shayokh@uits.edu.bd";
+        function generate() {
+            var testimonial = "/testimonial.docx";
+            var recommendation = "/recommendation.docx";
+            var whome = "";
+            var path;
+            if (getUrlParameter(type) == "ts") {
+                path = testimonial;
+            } else if (getUrlParameter(type) == "rc") {
+                path = recommendation;
+            } else {
+                path = whome;
             }
-            doc.setData({
-                memo_no: getUrlParameter(memo_no),
-                date: new Date().toDateString(),
-                name: getUrlParameter(name),
-                fName:  getUrlParameter(fName),
-                mName: getUrlParameter(mName),
-                id:  getUrlParameter(id),
-                from_sem:  getUrlParameter(from_sem),
-                to_sem:  getUrlParameter(to_sem),
-                dept: dept1,
-                date_of_pass: new Date(getUrlParameter(date_of_pass)).toDateString() ,
-                cgpa:  getUrlParameter(cgpa),
-                dp_head: dp_head1,
-                dp_head_email: dp_head_email1
-            });
-            try {
-                // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-                doc.render()
-            }
-            catch (error) {
-                // The error thrown here contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
-                function replaceErrors(key, value) {
-                    if (value instanceof Error) {
-                        return Object.getOwnPropertyNames(value).reduce(function (error, key) {
-                            error[key] = value[key];
-                            return error;
-                        }, {});
-                    }
-                    return value;
+
+            loadFile(path, function (error, content) {
+                if (error) { throw error };
+                var zip = new PizZip(content);
+                var doc = new window.docxtemplater().loadZip(zip);
+                var dp_head1, dept1, dp_head_email1, sub1,gender1,he1,him1,He1,Him1,his1,His1;
+
+
+                if (getUrlParameter(dept) == "CSE") {
+                    dept1 = "Department of Computer Science and Technology (CSE)";
+                    dp_head1 = "Al-Imtiaz";
+                    dp_head_email1 = "al.imtiaz@uits.edu.bd";
+                    sub1 = "Computer Science and Engineering (CSE)";
+                } else if (getUrlParameter(dept) == "IT") {
+                    dept1 = "Department of Information Technology (IT)";
+                    dp_head1 = "Md. Al Shayokh";
+                    sub1 = "Information Technology (IT)";
+                    dp_head_email1 = "al.shayokh@uits.edu.bd";
                 }
-                console.log(JSON.stringify({ error: error }, replaceErrors));
 
-                if (error.properties && error.properties.errors instanceof Array) {
-                    const errorMessages = error.properties.errors.map(function (error) {
-                        return error.properties.explanation;
-                    }).join("\n");
-                    console.log('errorMessages', errorMessages);
-                    // errorMessages is a humanly readable message looking like this :
-                    // 'The tag beginning with "foobar" is unopened'
+                if(getUrlParameter(gender)=="male"){
+                    he1="he";
+                    He1 = "He";
+                    him1="him";  
+                    Him1="Him";
+                    His1 = "His";
+                    his1="his";
+                    
                 }
-                throw error;
-            }
-            var out = doc.getZip().generate({
-                type: "blob",
-                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            }) 
-            saveAs(out, "output.docx")
-        })
-    }
-</script>
+                else{
+                    he1="she";
+                    He1 = "She"; 
+                    him1="her";
+                    Him1="Her";
+                    his1 = "her";
+                    His1 = "Her";
+                }
+                data = {
+                    memo_no: getUrlParameter(memo_no),
+                    date: new Date().toDateString(),
+                    name: getUrlParameter(name),
+                    fName: getUrlParameter(fName),
+                    mName: getUrlParameter(mName),
+                    id: getUrlParameter(id),
+                    from_sem: getUrlParameter(from_sem),
+                    to_sem: getUrlParameter(to_sem),
+                    dept: dept1,
+                    date_of_pass: new Date(getUrlParameter(date_of_pass)).toDateString(),
+                    cgpa: getUrlParameter(cgpa),
+                    dp_head: dp_head1,
+                    dp_head_email: dp_head_email1,
+                    sub:sub1,
+                    he:he1,
+                    him:him1,
+                    Him:Him1,
+                    He:He1,
+                    His:His1,
+                    his:his1
+                };
+                doc.setData(data);
+
+                firebase.database().ref('Documents/'+getUrlParameter(id)).push().
+                    set(data, function (error) {
+                        if (error) {
+                            alert("The document recording is failed in server .Error - " + error);
+                            console.log(error);
+                        } else {
+                            alert("The document recording successfully done in server. Now you can download it.");
+                            const btnSubmit = document.querySelector('button');
+                            btnSubmit.disabled = false;
+
+                            try {
+                                // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+                                doc.render()
+                            }
+                            catch (error) {
+                                // The error thrown here contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
+                                function replaceErrors(key, value) {
+                                    if (value instanceof Error) {
+                                        return Object.getOwnPropertyNames(value).reduce(function (error, key) {
+                                            error[key] = value[key];
+                                            return error;
+                                        }, {});
+                                    }
+                                    return value;
+                                }
+                                console.log(JSON.stringify({ error: error }, replaceErrors));
+
+                                if (error.properties && error.properties.errors instanceof Array) {
+                                    const errorMessages = error.properties.errors.map(function (error) {
+                                        return error.properties.explanation;
+                                    }).join("\n");
+                                    console.log('errorMessages', errorMessages);
+                                    // errorMessages is a humanly readable message looking like this :
+                                    // 'The tag beginning with "foobar" is unopened'
+                                }
+                                throw error;
+                            }
+                            var out = doc.getZip().generate({
+                                type: "blob",
+                                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            })
+
+                            saveAs(out, getUrlParameter(id) + ".docx")
+                        }
+                    });
+
+
+            })
+        }
+
+
+    </script>
+</body>
+
+
+
+
 
 </html>
